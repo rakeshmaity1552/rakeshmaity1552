@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System - Midnapore College</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Login Page -->
+<div id="loginPage" class="login-container">
+    <div class="login-background"></div>
+    <div class="login-content">
+        <div class="university-header">
+            <i class="fas fa-university"></i>
+            <h1>Library Management System</h1>
+            <p>Midnapore College (Autonomous)</p>
+        </div>
+        
+        <div class="login-tabs">
+            <button class="tab-btn active" onclick="switchTab('user')">
+                <i class="fas fa-user"></i> Student Login
+            </button>
+            <button class="tab-btn" onclick="switchTab('admin')">
+                <i class="fas fa-user-shield"></i> Admin Login
+            </button>
+        </div>
+        
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+    </div>
+</div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <!-- Navigation Header -->
+        <nav class="navbar">
+            <div class="nav-content">
+                <div class="nav-brand">
+                    <i class="fas fa-book-open"></i>
+                    <span>Midnapore College Library</span>
+                </div>
+                <div class="nav-user">
+                    <span id="welcomeUser" class="welcome-text"></span>
+                    <button onclick="logout()" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="app-container">
+            <!-- Admin Panel -->
+            <div id="adminPanel" class="admin-panel" style="display: none;">
+                <div class="admin-header">
+                    <h2><i class="fas fa-cogs"></i> Administrative Panel</h2>
+                    <p>Manage library resources and inventory</p>
+                </div>
+                
+                <div class="admin-cards">
+                    <div class="admin-card">
+                        <h3><i class="fas fa-plus-circle"></i> Add New Book</h3>
+                        <form id="addBookForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="title">Book Title</label>
+                                    <input type="text" id="title" name="title" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="author">Author</label>
+                                    <input type="text" id="author" name="author" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" id="quantity" name="quantity" min="1" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Book
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Panel -->
+            <div id="userPanel" class="user-panel">
+                <!-- Search Section -->
+                <div class="search-hero">
+                    <div class="hero-content">
+                        <h2><i class="fas fa-search"></i> Central Library</h2>
+                        <p>Search through our extensive collection of books and resources</p>
+                        <div class="search-container">
+                            <div class="search-tabs">
+                                <button class="search-tab active" onclick="switchSearchTab('title')">
+                                    <i class="fas fa-book"></i> Search by Title
+                                </button>
+                                <button class="search-tab" onclick="switchSearchTab('author')">
+                                    <i class="fas fa-user-edit"></i> Search by Author
+                                </button>
+                            </div>
+                            <div class="search-box">
+                                <input type="text" id="searchInput" placeholder="Enter search term...">
+                                <button onclick="performSearch()" class="search-btn">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <button onclick="loadAllBooks()" class="btn btn-outline">
+                                <i class="fas fa-list"></i> Show All Books
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Books Display Section -->
+                <div class="books-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-books"></i> Library Collection</h3>
+                        <div class="section-stats" id="bookStats"></div>
+                    </div>
+                    <div id="booksContainer" class="books-container">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i> Loading library collection...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Modal -->
+        <div id="actionModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Book Action</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <form id="actionForm">
+                    <input type="hidden" id="modalBookId">
+                    <div class="form-group">
+                        <label for="borrowerName">Borrower Name:</label>
+                        <input type="text" id="borrowerName" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="modalSubmitBtn">Confirm</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
